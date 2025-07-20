@@ -19,3 +19,30 @@ docker stats
 
 ---------------------------------------------------------------------------------------
 kubectl create namespace citus
+
+create citus workers
+create citus coordinator 
+
+register citus workers
+
+kubectl exec -n citus citus-worker-0 -- sh -c 'echo $(hostname).$(hostname -d)'
+
+SELECT * FROM master_add_node('citus-worker-0.citus-worker.citus.svc.cluster.local', 5432);
+SELECT * FROM master_add_node('citus-worker-1.citus-worker.citus.svc.cluster.local', 5432);
+
+--------------------------------------------------------------------------------------
+create schema on postgresql
+
+kubectl exec -it -n citus pod/citus-coordinator-6ccffcd8b4-qxccn -- bash
+
+CREATE TABLE sensor_data (
+    sensor_id int,
+    id serial,
+    temperature float,
+    created_at timestamptz default now(),
+    PRIMARY KEY (sensor_id, id)
+
+SELECT create_distributed_table('sensor_data', 'sensor_id');
+
+
+---------------------------------------------------------------------------
