@@ -6,3 +6,16 @@ chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
 
 
+-- Create Kubernet Cluster
+kind create cluster --config kind-config.yaml
+
+---------------------------------------------------------------------------------------
+
+-- Get Node Level stats (CPU, Memory etc.)
+
+kubectl get nodes
+kubectl get nodes -o wide
+docker stats
+
+---------------------------------------------------------------------------------------
+kubectl create namespace citus
